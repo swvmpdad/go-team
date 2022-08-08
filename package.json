@@ -1,0 +1,24 @@
+{
+  "name": "go-team",
+  "version": "1.0.0",
+  "description": "Module 10 Challenge",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swvmpdad/go-team.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swvmpdad/go-team/issues"
+  },
+  "homepage": "https://github.com/swvmpdad/go-team#readme",
+  "dependencies": {
+    "inquirer": "^8.2.4",
+    "jest": "^28.1.3"
+  }
+}
