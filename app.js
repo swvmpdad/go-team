@@ -47,12 +47,17 @@ const promptTeam = () => {
         ])
 };
 
-const teamMemberType = () => {
+const promptMember = memberData => {
     console.log(`
     =====================
     Add a New Team Member
     =====================
     `);
+
+        if (!memberData.members) {
+            memberData.members = [];
+            }
+
     return inquirer
         .prompt([
             {
@@ -62,68 +67,152 @@ const teamMemberType = () => {
                 choices: ['Engineer', 'Intern']
             }
         ])
-};
-
-const engineerMember = () => {
-    if (!engineerData.members) {
-    engineerData.members = [];
-    }
-
-    return inquirer
-        .prompt([
-            {
-                type: 'input',
-                name: 'name',
-                message: "What is the engineer's name?",
-                validate: nameInput => {
-                    if (nameInput) {
-                        return true;
-                    } else {
-                        console.log('Please enter a valid name.');
-                        return false;
+        .then(response => {
+            if (response.position === 'Engineer') {
+                return inquirer
+            .prompt([
+                {
+                    type: 'input',
+                    name: 'name',
+                    message: "What is the engineer's name?",
+                    validate: nameInput => {
+                        if (nameInput) {
+                            return true;
+                        } else {
+                            console.log('Please enter a valid name.');
+                            return false;
+                        }
                     }
-                }
-            },
-            {
-                type: 'number',
-                name: 'id',
-                message: "What is the engineer's ID number?",
-                validate: idInput => {
-                    if (idInput) {
-                        return true;
-                    } else {
-                        console.log('Please enter a valid ID number.');
-                        return false;
+                },
+                {
+                    type: 'number',
+                    name: 'id',
+                    message: "What is the engineer's ID number?",
+                    validate: idInput => {
+                        if (idInput) {
+                            return true;
+                        } else {
+                            console.log('Please enter a valid ID number.');
+                            return false;
+                        }
                     }
-                }
-            },
-            {
-                type: 'input',
-                name: 'email',
-                message: "What is the engineer's email?",
-                validate: emailInput => {
-                    if (emailInput) {
-                        return true;
-                    } else {
-                        console.log('Please enter a valid email.');
-                        return false;
+                },
+                {
+                    type: 'input',
+                    name: 'email',
+                    message: "What is the engineer's email?",
+                    validate: emailInput => {
+                        if (emailInput) {
+                            return true;
+                        } else {
+                            console.log('Please enter a valid email.');
+                            return false;
+                        }
                     }
+                },
+                {
+                    type: 'input',
+                    name: 'github',
+                    message: "What is the engineer's Github username?",
+                    validate: githubInput => {
+                        if (githubInput) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                },
+                {
+                    type: 'confirm',
+                    name: 'confirmAddMember',
+                    message: 'Would you like to add another team member?'
                 }
-            },
-            {
-                type: 'confirm',
-                name: 'confirmAddMember',
-                message: 'Would you like to add another team member?'
-            }
-        ])
-        .then(engMemberData => {
-            engineerData.members.push(engMemberData);
-            if (engMemberData.confirmAddMember) {
+            ])
+            .then(engineerData => {
+                memberData.members.push(engineerData);
+                if (engineerData.confirmAddMember) {
+                    return promptMember(memberData);
+                } else {
+                    return memberData;
+                }
+            });
+            } else if (response.position === 'Intern') {
+                return inquirer
+                .prompt([
+                    {
+                        type: 'input',
+                        name: 'name',
+                        message: "What is the intern's name?",
+                        validate: nameInput => {
+                            if (nameInput) {
+                                return true;
+                            } else {
+                                console.log('Please enter a valid name.');
+                                return false;
+                            }
+                        }
+                    },
+                    {
+                        type: 'number',
+                        name: 'id',
+                        message: "What is the intern's ID number?",
+                        validate: idInput => {
+                            if (idInput) {
+                                return true;
+                            } else {
+                                console.log('Please enter a valid ID number.');
+                                return false;
+                            }
+                        }
+                    },
+                    {
+                        type: 'input',
+                        name: 'email',
+                        message: "What is the intern's email?",
+                        validate: emailInput => {
+                            if (emailInput) {
+                                return true;
+                            } else {
+                                console.log('Please enter a valid email.');
+                                return false;
+                            }
+                        }
+                    },
+                    {
+                        type: 'input',
+                        name: 'school',
+                        message: "What is the intern's school?",
+                        validate: schoolInput => {
+                            if (schoolInput) {
+                                return true;
+                            } else {
+                                console.log('Please enter a valid school.');
+                                return false;
+                            }
+                        }
+                    },
+                    {
+                        type: 'confirm',
+                        name: 'confirmAddMember',
+                        message: 'Would you like to add another team member?'
+                    } 
+                ]).then(internData => {
+                    memberData.members.push(internData);
+                    if (internData.confirmAddMember) {
+                        return promptMember(memberData);
+                    } else {
+                        return memberData;
+                    }
+                });
+            };
+        }
+)};
 
-            }
-        })
-};
-
-const internMember = () => {
-
-};
+promptTeam()
+    .then(promptMember)
+    .then(memberData => {
+        console.log(memberData);
+    })
+    .catch(err => {
+        console.log(err);
+    });
