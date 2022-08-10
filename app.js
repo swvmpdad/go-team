@@ -211,7 +211,17 @@ const promptMember = memberData => {
 promptTeam()
     .then(promptMember)
     .then(memberData => {
-        console.log(memberData);
+        generatePage(memberData);
+    })
+    .then(pageHTML => {
+        return writeFile(pageHTML);
+    })
+    .then(writeFileResponse => {
+        console.log(writeFileResponse);
+        return copyFile();
+    })
+    .then(copyFileResponse => {
+        console.log(copyFileResponse);
     })
     .catch(err => {
         console.log(err);
