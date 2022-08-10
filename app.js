@@ -69,6 +69,9 @@ const promptMember = memberData => {
         ])
         .then(response => {
             if (response.position === 'Engineer') {
+                if (!memberData.members.engineers) {
+                    memberData.members.engineers = [];
+                }
                 return inquirer
             .prompt([
                 {
@@ -129,7 +132,7 @@ const promptMember = memberData => {
                 }
             ])
             .then(engineerData => {
-                memberData.members.push(engineerData);
+                memberData.members.engineers.push(engineerData);
                 if (engineerData.confirmAddMember) {
                     return promptMember(memberData);
                 } else {
@@ -137,6 +140,9 @@ const promptMember = memberData => {
                 }
             });
             } else if (response.position === 'Intern') {
+                if (!memberData.members.interns) {
+                    memberData.members.interns = [];
+                }
                 return inquirer
                 .prompt([
                     {
@@ -197,7 +203,7 @@ const promptMember = memberData => {
                         message: 'Would you like to add another team member?'
                     } 
                 ]).then(internData => {
-                    memberData.members.push(internData);
+                    memberData.members.interns.push(internData);
                     if (internData.confirmAddMember) {
                         return promptMember(memberData);
                     } else {
