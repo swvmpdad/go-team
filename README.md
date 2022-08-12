@@ -13,8 +13,8 @@ An application to deploy an HTML file containing data cards of all of your team 
 ## Installation
 
 - Clone the repository from github 
-- navigate into the root directory in your console 
-- run 'npm i' to install the required node packages 
+- Navigate into the root directory in your console 
+- Run 'npm i' to install the required node packages 
 
 
 
@@ -23,8 +23,7 @@ An application to deploy an HTML file containing data cards of all of your team 
 ## Usage
 
 - Navigate into the root directory
-- Run 'node app'
-- or 'node app.js'
+- Run 'node app' or 'node app.js'
 - Answer the prompts about the manager's info
 - Choose whether to add an Engineer or an Intern
 - Answer the prompts for adding the new member
