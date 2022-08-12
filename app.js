@@ -1,13 +1,12 @@
-const { writeFile, copyFile } = require('./utils/generate-site');
+const writeFile = require('./utils/generate-site');
 const inquirer = require('inquirer');
-const generatePage = require('./src/page-template');
 
 const promptTeam = () => {
     return inquirer
         .prompt([
             {
                 type: 'input',
-                name: 'name',
+                name: 'managerName',
                 message: "What is the manager's name?",
                 validate: nameInput => {
                     if (nameInput) {
@@ -22,7 +21,7 @@ const promptTeam = () => {
                 type: 'number',
                 name: 'id',
                 message: "What is the manager's ID number?",
-                validate: idInput => {
+                              validate: idInput => {
                     if (idInput) {
                         return true;
                     } else {
@@ -43,8 +42,21 @@ const promptTeam = () => {
                         return false;
                     }
                 }
+            },
+            {
+                type: 'number',
+                name: 'office',
+                message: "What is the manager's office number?",
+                validate: officeInput => {
+                    if (officeInput) {
+                        return true;
+                    } else {
+                        console.log('Please enter a valid office number.');
+                        return false;
+                    }
+                }
             }
-        ])
+        ]);
 };
 
 const promptMember = memberData => {
@@ -53,10 +65,6 @@ const promptMember = memberData => {
     Add a New Team Member
     =====================
     `);
-
-        if (!memberData.members) {
-            memberData.members = [];
-            }
 
     return inquirer
         .prompt([
@@ -69,8 +77,8 @@ const promptMember = memberData => {
         ])
         .then(response => {
             if (response.position === 'Engineer') {
-                if (!memberData.members.engineers) {
-                    memberData.members.engineers = [];
+                if (!memberData.engineers) {
+                    memberData.engineers = [];
                 }
                 return inquirer
             .prompt([
@@ -78,6 +86,7 @@ const promptMember = memberData => {
                     type: 'input',
                     name: 'name',
                     message: "What is the engineer's name?",
+                    
                     validate: nameInput => {
                         if (nameInput) {
                             return true;
@@ -91,7 +100,7 @@ const promptMember = memberData => {
                     type: 'number',
                     name: 'id',
                     message: "What is the engineer's ID number?",
-                    validate: idInput => {
+                                      validate: idInput => {
                         if (idInput) {
                             return true;
                         } else {
@@ -132,7 +141,7 @@ const promptMember = memberData => {
                 }
             ])
             .then(engineerData => {
-                memberData.members.engineers.push(engineerData);
+                memberData.engineers.push(engineerData);
                 if (engineerData.confirmAddMember) {
                     return promptMember(memberData);
                 } else {
@@ -140,8 +149,8 @@ const promptMember = memberData => {
                 }
             });
             } else if (response.position === 'Intern') {
-                if (!memberData.members.interns) {
-                    memberData.members.interns = [];
+                if (!memberData.interns) {
+                    memberData.interns = [];
                 }
                 return inquirer
                 .prompt([
@@ -187,7 +196,7 @@ const promptMember = memberData => {
                     {
                         type: 'input',
                         name: 'school',
-                        message: "What is the intern's school?",
+                        message: "What is the intern's school?",                     
                         validate: schoolInput => {
                             if (schoolInput) {
                                 return true;
@@ -203,32 +212,25 @@ const promptMember = memberData => {
                         message: 'Would you like to add another team member?'
                     } 
                 ]).then(internData => {
-                    memberData.members.interns.push(internData);
+                    memberData.interns.push(internData);
                     if (internData.confirmAddMember) {
                         return promptMember(memberData);
                     } else {
                         return memberData;
                     }
                 });
-            };
+            }
         }
-)};
+);};
 
 promptTeam()
     .then(promptMember)
     .then(memberData => {
-        generatePage(memberData);
-    })
-    .then(pageHTML => {
-        return writeFile(pageHTML);
+        writeFile(memberData);
     })
     .then(writeFileResponse => {
-        console.log(writeFileResponse);
-        return copyFile();
-    })
-    .then(copyFileResponse => {
-        console.log(copyFileResponse);
+        console.log('Site created!');
     })
     .catch(err => {
-        console.log(err);
+        console.log(err)
     });
